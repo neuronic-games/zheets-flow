@@ -61,6 +61,7 @@ export function getAllUserData() {
   return allUserData;
 }
 
+
 export const TheEntrance: React.FC<BMProps> = (props) => {
 /* export const TheEntrance: React.FC<{}> = () => { */
   const [peopleData,setPeopleData] = useState<Array<Item>>([]);
@@ -127,6 +128,7 @@ export const TheEntrance: React.FC<BMProps> = (props) => {
           loadUserDetailsFromSheet(String(urlParameters.id?.toString()), "People")
         }, 300)
       }
+
     }
     /////////////////////////////////////////////////////////////////////////////////////////////
     const onKeyDown = (e: KeyboardEvent) => {
@@ -210,6 +212,7 @@ export const TheEntrance: React.FC<BMProps> = (props) => {
         Object(window.document.getElementById("middleSection")).style.display = "none"
         showloader()
         // Calling load sheet
+        props.stores.roomInfo.activeSheetId = sheet_Id
         if(peopleData.length === 0) {
           loadUserDetailsFromSheet(sheet_Id, "People")
         }
@@ -247,7 +250,7 @@ export const TheEntrance: React.FC<BMProps> = (props) => {
   return <ErrorDialogFrame onClose={()=>{errorInfo.clear()}}>
     <DialogContent onClick={() => active ? errorInfo.clear() : ''} style={active ? {overflowY: 'hidden', overflowX:'hidden', backgroundColor: '#FFF', fontSize: isSmartphone() ? '2em' : '1em', transition: '0.3s ease-out'} : {overflowY: 'hidden', overflowX:'hidden', backgroundColor: '#FFF', fontSize: isSmartphone() ? '2em' : '1em', transition: '0s ease-out'}}>
       {/* <header style={{position:'relative', width:'100%', height:'200px', backgroundColor:'cyan'}}></header> */}
-      <p style={{textAlign:'right', color: 'black', fontSize: isSmartphone() ? '1.2em' : '1em'}}>Version 1.0.8</p>
+      <p style={{textAlign:'right', color: 'black', fontSize: isSmartphone() ? '1.2em' : '1em', fontWeight:'100', fontFamily:'DINCondensed-Bold'}}>Version 2.0.1</p>
       {/* <Button style={{position:'absolute', top:30, right:20, display:'none'}} onClick = {() => {
         const idx = (i18nSupportedLngs.findIndex(l => l === i18n.language) + 1) % i18nSupportedLngs.length
         i18n.changeLanguage(i18nSupportedLngs[idx])
@@ -262,9 +265,9 @@ export const TheEntrance: React.FC<BMProps> = (props) => {
       <p>
       </p>
       <div style={active ? {position: 'relative', width:'100em', display:'none'} : {position: 'relative', width:'100em', display:'block'}}/>
-      <div style={active ? {position: 'absolute', top: '3em', width: '100%', textAlign:'center', opacity:'0', transform: "scale(0.10)", transition: '0.3s ease-out', left: isSmartphone() ? "0.5em" : '0em'} : {position: 'relative', top: placeholderIndex === 0 ? '4em' : '2em', width: '100%', textAlign:'center', transition: '0.3s ease-out', left: isSmartphone() ? "0.5em" : '0em'}}>
-        <p style={{display:placeholderIndex === 0 ? 'none' : 'block', position: 'relative', top: '2em', left: '-5em', transform: 'scale(5)', fontWeight: '700'}}>FL</p>
-        <p style={{display:placeholderIndex === 0 ? 'none' : 'block', position: 'relative', top: '0em', left: '4.4em', transform: 'scale(5)', fontWeight: '700'}}>W</p>
+      <div style={active ? {position: 'absolute', top: '3em', width: '100%', textAlign:'center', opacity:'0', transform: "scale(0.10)", transition: '0.3s ease-out', left: isSmartphone() ? "0.5em" : '0em', fontFamily:'DINRegular'} : {position: 'relative', top: placeholderIndex === 0 ? '4em' : '2em', width: '100%', textAlign:'center', transition: '0.3s ease-out', left: isSmartphone() ? "0.5em" : '0em', fontFamily:'DINRegular'}}>
+        <p style={{display:placeholderIndex === 0 ? 'none' : 'block', position: 'relative', top: '2em', left: '-5em', transform: 'scale(5)'/* , fontWeight: '700' */}}>FL</p>
+        <p style={{display:placeholderIndex === 0 ? 'none' : 'block', position: 'relative', top: '0em', left: '4.4em', transform: 'scale(5)'/* , fontWeight: '700' */}}>W</p>
         <img style={placeholderIndex === 0 ? {position:'relative',width:'10em', userSelect:'none'} : {width:'4em', userSelect:'none', transition: '0.3s ease-out', position:'relative', top:'-4.2em'}} draggable={false} src={flowIcon}
         alt="" />
       </div>
@@ -273,22 +276,22 @@ export const TheEntrance: React.FC<BMProps> = (props) => {
 
       <Box mt={isSmartphone() ? 3 : 2}>
       <div style={placeholderIndex === 0 ? {position: 'relative', top: '0em', width: '100%', textAlign:'center', display:'none'} : (placeholderIndex === -10 ? {position: 'relative', top: '6em', width: '100%', textAlign:'center'} : {position: 'relative', top: '6em', width: '100%', textAlign:'center', opacity:'0', transform: "scale(0.10)", transition: '0.3s ease-out'})  }>
-        <p style={{display: showError ? 'block' : 'none', color:'red', fontSize: isSmartphone() ? '1.2em' : '1em', position:'absolute', width:'100%', top:'-3em'}}>{t('loginError')}</p>
-        <InputLabel style={{fontSize: isSmartphone() ? '1.2em' : '1em', color: '#7A7A7A', padding:'0.2em 0 0.2em 0', marginLeft:'0em', position:'relative', left:'0%', width:'100%'}}> {t('email')}</InputLabel>
+        <p style={{display: showError ? 'block' : 'none', color:'red', fontSize: isSmartphone() ? '1.5em' : '1.2em', position:'absolute', width:'100%', top:'-3em', fontWeight:'100', fontFamily:'DINCondensed-Bold'}}>{t('loginError')}</p>
+        <InputLabel style={{fontSize: isSmartphone() ? '1.5em' : '1.2em', color: '#7A7A7A', padding:'0.2em 0 0.2em 0', marginLeft:'0em', position:'relative', left:'0%', width:'100%', fontWeight:'100', fontFamily:'DINCondensed-Bold'}}> {t('email')}</InputLabel>
         <Box mt={isSmartphone() ? 2 : 1}></Box>
-        <Input id='userEmail' type='text' autoFocus={true}  style={{position:'relative', width:isSmartphone() ? '80%' : '35%'}} value={name} disableUnderline={true} placeholder={'your@email.com'} inputProps={{style: {fontSize: isSmartphone() ? '2.5em' : '1em', height: isSmartphone() ? '1.5em' : '1.5em', color: '#747474', backgroundColor: '#E8E5E5', padding: '3px', width: '100%', left:'0%', border:'1px solid black', textAlign:'center', fontWeight:'700'}}} onChange={event =>(setName(event.target.value))} />
+        <Input id='userEmail' type='text' autoFocus={true}  style={{position:'relative', width:isSmartphone() ? '80%' : '35%'}} value={name} disableUnderline={true} placeholder={'your@email.com'} inputProps={{style: {fontSize: isSmartphone() ? '3em' : '1.2em', height: isSmartphone() ? '1.5em' : '1.5em', color: '#747474', backgroundColor: '#E8E5E5', padding: '3px', width: '100%', left:'0%', border:'1px solid black', textAlign:'center', fontWeight:'100', fontFamily:'DINCondensed-Bold'}}} onChange={event =>(setName(event.target.value))} />
       </div>
       </Box>
       <Box mt={isSmartphone() ? 3 : 2}>
       <div style={placeholderIndex === 0 ? {position: 'relative', top: '0em', width: '100%', textAlign:'center', display:'none'} : (placeholderIndex === -10 ? {position: 'relative', top: '6em', width: '100%', textAlign:'center'} : {position: 'relative', top: '6em', width: '100%', textAlign:'center', opacity:'0', transform: "scale(0.10)", transition: '0.3s ease-out'}) }>
-        <InputLabel style={{fontSize: isSmartphone() ? '1.2em' : '1em', color: '#7A7A7A', padding:'0.2em 0 0.2em 0', marginLeft:'0em', position:'relative', left:'0%', width:'100%'}}> {t('password')}</InputLabel>
+        <InputLabel style={{fontSize: isSmartphone() ? '1.5em' : '1.2em', color: '#7A7A7A', padding:'0.2em 0 0.2em 0', marginLeft:'0em', position:'relative', left:'0%', width:'100%', fontWeight:'100', fontFamily:'DINCondensed-Bold'}}> {t('password')}</InputLabel>
         <Box mt={isSmartphone() ? 2 : 1}></Box>
-        <Input id='userPass' type='password' style={{position:'relative', width:isSmartphone() ? '80%' : '35%'}} value={password} autoFocus={false} disableUnderline={true} placeholder={'your_password'} inputProps={{style: {fontSize: isSmartphone() ? '2.5em' : '1em', height: isSmartphone() ? '1.5em' : '1.5em', color: '#747474', backgroundColor: '#E8E5E5', padding: '3px', width: '100%', left:'0%', border:'1px solid black', textAlign:'center', fontWeight:'700'}}} onChange={event => (setPassword(event.target.value))} />
+        <Input id='userPass' type='password' style={{position:'relative', width:isSmartphone() ? '80%' : '35%'}} value={password} autoFocus={false} disableUnderline={true} placeholder={'your_password'} inputProps={{style: {fontSize: isSmartphone() ? '3em' : '1.2em', height: isSmartphone() ? '1.5em' : '1.5em', color: '#747474', backgroundColor: '#E8E5E5', padding: '3px', width: '100%', left:'0%', border:'1px solid black', textAlign:'center', fontWeight:'100', fontFamily:'DINCondensed-Bold'}}} onChange={event => (setPassword(event.target.value))} />
       </div>
       </Box>
 
       <div style={placeholderIndex === 0 ? {position: 'relative', top: isSmartphone() ? '7em' : '7em', width: '100%', textAlign:'center', display:'none'} : (placeholderIndex === -10 ? {position: 'relative', top:isSmartphone() ? '7em' : '7em', width: '100%', textAlign:'center'} : {position: 'relative', top: isSmartphone() ? '7em' : '7em', width: '100%', textAlign:'center', opacity:'0', transform: "scale(0.10)", transition: '0.3s ease-out'}) }>
-        <img style={{width:'6.5em', userSelect:'none'}} src={btnGo} draggable={false} onClick={() => onErrorClose()} alt="" />
+        <img style={{width:isSmartphone() ? '6.5em' : '5em', userSelect:'none'}} src={btnGo} draggable={false} onClick={() => onErrorClose()} alt="" />
       </div>
       {/* <footer style={{position:'relative', width:'100%', height:'200px', backgroundColor:'cyan', bottom:'-2em'}}></footer> */}
       </>
@@ -306,10 +309,10 @@ export const TheEntrance: React.FC<BMProps> = (props) => {
         </header>
 
 
-        <div id="middleSection" style={{position: 'relative', top: '-2em', width:'100%', height:'100%', fontFamily:'DINRegular', textAlign:'center', backgroundColor:'#FFFFFF'}}>
+        <div id="middleSection" style={{position: 'relative', top: '1em', width:'100%', height:'100%', fontFamily:'DINRegular', textAlign:'center', backgroundColor:'#FFFFFF'}}>
           <p id='errorMsg'  style={{opacity:'1', position:'relative', top:isSmartphone() ? '7em' : '6em', fontSize:'1.2em', color:'red'}}></p>
-          <h4 style={{position:'relative', top:isSmartphone() ? '5em' : '6em'}}>ENTER YOUR GOOGLE SHEET ID OR GOOGLE SHEET URL</h4>
-          <div id="settingBox" style={{position:'relative', top:isSmartphone() ? '7em' : '6em'}}>
+          <h4 style={{position:'relative', top:isSmartphone() ? '5em' : '3em'/* '6em' */, fontFamily:'DINCondensed-Bold', fontSize:'1.6em'}}>ENTER YOUR GOOGLE SHEET ID OR GOOGLE SHEET URL</h4>
+          <div id="settingBox" style={{position:'relative', top:isSmartphone() ? '6.5em'/* '7em' */ : '3.5em'/* '6em' */}}>
             <div>
               <input className="form-control" type="text" name="usheetId" pattern="[A-Za-z0-9]+" onChange={event =>(setSheetId(event.target.value))}/>
             </div>

@@ -8,6 +8,7 @@ import {MapProps} from '@components/utils'
 import React from 'react'
 import {BackgroundLayer} from './Background'
 import { ViewMode } from './UI/ViewMode'
+import { TitleView } from './UI/TitleView'
 
 
 export const Map: React.FC<MapProps> = (props) => {
@@ -18,6 +19,7 @@ export const Map: React.FC<MapProps> = (props) => {
     <Base {...props}>
       <BackgroundLayer {...props}/>
       {/* <ShareLayer {...props} />*/}
+      <TitleView {...props} />
       <ViewMode {...props} />
       {/* <ParticipantLayer {...props}/> */}
 

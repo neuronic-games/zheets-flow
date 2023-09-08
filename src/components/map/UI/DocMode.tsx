@@ -35,8 +35,9 @@ import { updateSheetDetails } from '@models/api/GoogleSheet'
 
 import moment from "moment";
 
-import btnAddComment from '@images/flow_sym_add_big.png'
+/* import btnAddComment from '@images/flow_sym_add_big.png' */
 import btnCancelComment from '@images/flow_sym_cancel.png'
+import btnOk from '@images/flow_sym_ok.png'
 
 
 
@@ -46,7 +47,20 @@ import DatePicker from "react-datepicker"; */
 
 import Calendar from "react-calendar";
 /* import Dropdown from 'react-dropdown'; */
-import Select from 'react-select'
+/* import Select from 'react-select' */
+/* import { TextField } from '@material-ui/core'
+import { MouseOrTouch } from '../Share/RndContent' */
+
+import CalenderSelector from '@material-ui/icons/CalendarToday';
+import { List, ListItem, ListItemText } from '@material-ui/core'
+import ExpandMore from '@material-ui/icons/ExpandMore';
+
+
+
+
+
+
+
 
 
 /* const ITEM_HEIGHT = 48;
@@ -79,18 +93,18 @@ const buttonStyle = {
 }
 
 
-const customStyles = {
+/* const customStyles = {
   control: (base:any, state:any) => ({
     ...base,
-   /*  background: "#808080",
- */
+    background: "#808080",
+
    background: "#808080",
-   /* color: "#000000", */
-    /* borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
-    borderColor: state.isFocused ? "#FFFFFF" : "#FFFFFF", */
+   color: "#000000",
+    borderRadius: state.isFocused ? "3px 3px 0 0" : 3,
+    borderColor: state.isFocused ? "#FFFFFF" : "#FFFFFF",
     boxShadow: state.isFocused ? null : null,
     "&:hover": {
-      /* borderColor: state.isFocused ? "lightorange" : "orange" */
+      borderColor: state.isFocused ? "lightorange" : "orange"
     }
   }),
   dropdownIndicator: (base:any) => ({
@@ -111,7 +125,7 @@ const customStyles = {
     backgroundColor: state.isSelected ? '#F7931E' : 'inherit',
     '&:hover': { backgroundColor: state.isSelected ? '#F7931E' : 'rgb(249, 217, 181)' }
   }),
-};
+}; */
 //rgb(222, 235, 255)
 
 const useStyles = makeStyles({
@@ -123,10 +137,14 @@ const useStyles = makeStyles({
   rootList: {
     padding: 2,
     position:'relative',
-    height: isSmartphone() ? 'auto' : 'auto',
-    fontSize:isSmartphone() ? '2.2em' : '1.5em',
+   /*  height: isSmartphone() ? 'auto' : 'auto',
+    fontSize:isSmartphone() ? '2.2em' : '1.5em', */
+    width:isSmartphone() ? '100%' : '695px'/* '675px' */,
+    fontSize: isSmartphone() ? '1.5em' : '1em',
     fontFamily: 'DINCondensed-Bold',
-    overflow: 'auto',
+    fontWeight: 100,
+    overflow: 'hidden',
+    backgroundColor: '#808080'
   },
 
   formControlLabel: {
@@ -268,8 +286,8 @@ export function getAddNoteDialogStatus() {
 
 ////////////////////////////////////////////////////
 let AllSelectedMessages:any = []
-type ValuePiece = Date | null;
-type Value = ValuePiece | [ValuePiece, ValuePiece];
+/* type ValuePiece = Date | null;
+type Value = ValuePiece | [ValuePiece, ValuePiece]; */
 let dateSelected:boolean = false
 ////////////////////////////////////////////////////
 
@@ -304,10 +322,6 @@ export const DocMode: React.FC<BMProps> = (props) => {
 
 
 
-
-
-
-
   //console.log(allMessages.data, " MESSAGES")
 
   //console.log(selectedItem, " In VM---")
@@ -334,9 +348,18 @@ const [openAssign, setOpenAssign] = React.useState(false);
 
 const [selectedIndex, setSelectedIndex] = React.useState(-1);
 /* const [selectedUser, setSelectedUser] = React.useState({value:'', label:''}); */
-console.log(docSelected, '!==', getTaskDueDate())
+//console.log(docSelected, '!==', getTaskDueDate())
 //let sDate:string = '"'+getTaskDueDate()+'"'
-const [value, onChange] = React.useState<Value>(new Date());
+
+//const [value, onChange] = React.useState<Value>(new Date());
+const [value, onChange] = React.useState('undefined');
+
+
+/* const [selectedDate, setSelectedDate] = React.useState(null) */
+const [openPicker, setOpenPicker] = React.useState(false)
+const [manualDate, setManualDate] = React.useState("")
+
+const [openUser, setOpenUser] = React.useState(false)
 ////////////////////////////////////////////////////////////////////////////////////
 const sheetUserData = getAllUserData()
 // To get all message data
@@ -368,15 +391,17 @@ if(props.stores.roomInfo.activeMenuType === 'docdetailview') {
   //let AllSelectedMessages:any = []
   AllSelectedMessages = []
   AllFlowMessages = []
+  //console.log(Object(allMessages).length, " ----- MESSAGES-----")
   //if(AllSelectedMessages.length === 0) {
-    for (let i=0; i<Object(allMessages).length; i++) {
+  ///////////////////////////////////////////////////////////////////////////////////////
+    /* for (let i=0; i<Object(allMessages).length; i++) {
       //////////////////////////////////////////////////////////////////////////////////////////////////////
       // New Logic
       let allAssignItems = selectedItem[docSelected].split(":");
       //console.log(allAssignItems, " IIIII")
       for(let j=0; j<allAssignItems.length; j++) {
         if(allAssignItems[j].indexOf("M") !== -1) {
-          //console.log(Object(allMessages.data[i])['ID'], " --MCHECK-- ", allAssignItems[j])
+          console.log(Object(allMessages[i])['ID'], " --MCHECK-- ", allAssignItems[j])
           if(Object(allMessages[i])['ID'] === allAssignItems[j]) {
             AllSelectedMessages.push(Object(allMessages[i]))
           }
@@ -385,7 +410,31 @@ if(props.stores.roomInfo.activeMenuType === 'docdetailview') {
       // Storeing values
       AllFlowMessages.push(Object(allMessages[i]))
       //console.log(AllFlowMessages, " FlowMessages")
+    } */
+    ///////////////////////////////////////////////////////////////////////
+    let allAssignItems = selectedItem[docSelected].split(":");
+      //console.log(allAssignItems, " IIIII")
+    for(let j=0; j<allAssignItems.length; j++) {
+      if(allAssignItems[j].indexOf("M") !== -1) {
+        for (let i=0; i<Object(allMessages).length; i++) {
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // New Logic
+          //console.log(Object(allMessages[i])['ID'], " --MCHECK-- ", allAssignItems[j])
+          if(allAssignItems[j] === Object(allMessages[i])['ID']) {
+            AllSelectedMessages.push(Object(allMessages[i]))
+          }
+          //AllFlowMessages.push(Object(allMessages[i]))
+        }
+      }
+      // Storeing values
+      //AllFlowMessages.push(Object(allMessages[i]))
+      //console.log(AllFlowMessages, " FlowMessages")
     }
+    for (let i=0; i<Object(allMessages).length; i++) {
+      AllFlowMessages.push(Object(allMessages[i]))
+    }
+    ///////////////////////////////////////////////////////////////////////
+
   //}
 
   //props.stores.roomInfo.activeFlowMessages = AllSelectedMessages
@@ -395,111 +444,121 @@ if(props.stores.roomInfo.activeMenuType === 'docdetailview') {
   //console.log("vvvvvvvvvvvvvvvvv------", assignedTaksUser, "---", moment(new Date(prevSelectedDueDate)).format("L"), " >>> ", moment(value?.toString()).format('L'))
   //console.log(assignedTaksUser, '!== "" ||', prevSelectedUserIndex, '!==', assignedUserIndex, '||', (moment(new Date(prevSelectedDueDate)).format("L"), '!==', moment(value?.toString()).format('L')))
 
-  if(docDone && assignedUserIndex !== -1) {
-    let doneDate = new Date()
-    let year = doneDate.getFullYear();
-    let month = String(doneDate.getMonth() + 1).padStart(2, '0');
-    let day = String(doneDate.getDate()).padStart(2, '0');
-    let hours = String(doneDate.getHours()).padStart(2, '0');
-    let minutes = String(doneDate.getMinutes()).padStart(2, '0');
-    let seconds = String(doneDate.getSeconds()).padStart(2, '0');
-    let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
+  /* console.log(value !== 'undefined' ? value : '', " DATATATATA") */
 
-    let newItem:string = JSON.parse('{"Timestamp": "'+ dateString +'", "ID":"M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "Task marked completed."}')
-
-    // string value to update the spreadsheet Message Tab
-    let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle(), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), 'Task marked completed.']
+  /* let validDate = value !== 'undefined' ? isValidDate(moment(value?.toString()).format('L')) : false */
 
 
-    AllSelectedMessages.splice(0,0,newItem)
-    updateFlowData('Message_Done', AllSelectedMessages[0]['ID'], '', updateMessage, '')
 
-    /* props.stores.roomInfo.activeFlowMessages = AllSelectedMessages
-    updateFlowData('Message_Done', AllSelectedMessages[0]['ID'], '') */
-    //console.log(AllSelectedMessages, " after change")
-  } else if(open === false && comment !== '') {
-    // Add new custom comment from user
-    let doneDate = new Date()
-    let year = doneDate.getFullYear();
-    let month = String(doneDate.getMonth() + 1).padStart(2, '0');
-    let day = String(doneDate.getDate()).padStart(2, '0');
-    let hours = String(doneDate.getHours()).padStart(2, '0');
-    let minutes = String(doneDate.getMinutes()).padStart(2, '0');
-    let seconds = String(doneDate.getSeconds()).padStart(2, '0');
-    let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
+  if(isAddNoteDialogActive === false) {
+    if(docDone && assignedUserIndex !== -1) {
+      let doneDate = new Date()
+      let year = doneDate.getFullYear();
+      let month = String(doneDate.getMonth() + 1).padStart(2, '0');
+      let day = String(doneDate.getDate()).padStart(2, '0');
+      let hours = String(doneDate.getHours()).padStart(2, '0');
+      let minutes = String(doneDate.getMinutes()).padStart(2, '0');
+      let seconds = String(doneDate.getSeconds()).padStart(2, '0');
+      let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
 
-    //console.log(comment, " >>>new Item")
+      let newItem:string = JSON.parse('{"Timestamp": "'+ dateString +'", "ID":"M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "Task marked completed."}')
 
-    let msgStr = '{"Timestamp": "'+ dateString +'", "ID": "M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "' + comment +'"}'
+      // string value to update the spreadsheet Message Tab
+      let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle(), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), 'Task marked completed.']
 
-    const regex = /('(?=(,\s*')))|('(?=:))|((?=([:,]\s*))')|((?={)')|('(?=}))/g;
-    let actualMessage = msgStr.replace(regex, '').replace(/\n/g, ' ')
-    let newItem:string = JSON.parse(actualMessage)
 
-    // string value to update the spreadsheet Message Tab
+      AllSelectedMessages.splice(0,0,newItem)
+      updateFlowData('Message_Done', AllSelectedMessages[0]['ID'], '', updateMessage, '')
 
-    let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle().replace(regex, '').replace(/\n/g, ' '), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), comment.replace(regex, '').replace(/\n/g, ' ')]
+      /* props.stores.roomInfo.activeFlowMessages = AllSelectedMessages
+      updateFlowData('Message_Done', AllSelectedMessages[0]['ID'], '') */
+      //console.log(AllSelectedMessages, " after change")
+    } else if(open === false && comment !== '') {
+      // Add new custom comment from user
+      let doneDate = new Date()
+      let year = doneDate.getFullYear();
+      let month = String(doneDate.getMonth() + 1).padStart(2, '0');
+      let day = String(doneDate.getDate()).padStart(2, '0');
+      let hours = String(doneDate.getHours()).padStart(2, '0');
+      let minutes = String(doneDate.getMinutes()).padStart(2, '0');
+      let seconds = String(doneDate.getSeconds()).padStart(2, '0');
+      let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
 
-    AllSelectedMessages.splice(0,0,newItem)
-    // Update that message to observable object
-    AllFlowMessages.splice(0, 0, newItem)
-    //console.log("total message ", AllFlowMessages)
-    props.stores.roomInfo.activeFlowMessages = AllFlowMessages; //AllSelectedMessages
-    updateFlowData('Message', AllSelectedMessages[0]['ID'], '', updateMessage, '')
-    // Reset it again
-    setComment('')
-  } else if(openAssign === false && assignedTaksUser !== "" && prevSelectedUserIndex !== assignedUserIndex) {
- /*  } else if(openAssign === false && (assignedTaksUser !== "" || prevSelectedUserIndex !== assignedUserIndex || (moment(new Date(prevSelectedDueDate)).format("L") !== moment(value?.toString()).format('L')))) { */
- console.log("MSG ASSIGN UPDATED")
-    let doneDate = new Date()
-    let year = doneDate.getFullYear();
-    let month = String(doneDate.getMonth() + 1).padStart(2, '0');
-    let day = String(doneDate.getDate()).padStart(2, '0');
-    let hours = String(doneDate.getHours()).padStart(2, '0');
-    let minutes = String(doneDate.getMinutes()).padStart(2, '0');
-    let seconds = String(doneDate.getSeconds()).padStart(2, '0');
-    let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
+      //console.log(comment, " >>>new Item")
 
-    let newItem:string = JSON.parse('{"Timestamp": "'+ dateString +'", "ID":"M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "Task has reassigned to ' + assignedTaksUser +'"}')
-    AllSelectedMessages.splice(0,0,newItem)
+      let msgStr = '{"Timestamp": "'+ dateString +'", "ID": "M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "' + comment +'"}'
 
-    // string value to update the spreadsheet Message Tab
-    const regex = /('(?=(,\s*')))|('(?=:))|((?=([:,]\s*))')|((?={)')|('(?=}))/g;
-    let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle().replace(regex, '').replace(/\n/g, ' '), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), ('Task has reassigned to ' + assignedTaksUser).replace(regex, '').replace(/\n/g, ' ')]
+      const regex = /('(?=(,\s*')))|('(?=:))|((?=([:,]\s*))')|((?={)')|('(?=}))/g;
+      let actualMessage = msgStr.replace(regex, '').replace(/\n/g, ' ')
+      let newItem:string = JSON.parse(actualMessage)
 
-    AllFlowMessages.splice(0, 0, newItem)
-    props.stores.roomInfo.activeFlowMessages = AllFlowMessages; //AllSelectedMessages
-    updateFlowData('Message_Assign', AllSelectedMessages[0]['ID'], assignedTaksUser, updateMessage, '')
-    //console.log("USER UDATED")
-    /////////////////////////////////////////////////
-    prevSelectedUserIndex = assignedUserIndex
-    assignedTaksUser = ''
-    assignedUserIndex = -1
-    /////////////////////////////////////////////////
-  } else if(openAssign === false && dateSelected === true && (moment(new Date(prevSelectedDueDate)).format("L") !== moment(value?.toString()).format('L'))) {
-    console.log("DUE DATE UPDATED")
-    let doneDate = new Date()
-    let year = doneDate.getFullYear();
-    let month = String(doneDate.getMonth() + 1).padStart(2, '0');
-    let day = String(doneDate.getDate()).padStart(2, '0');
-    let hours = String(doneDate.getHours()).padStart(2, '0');
-    let minutes = String(doneDate.getMinutes()).padStart(2, '0');
-    let seconds = String(doneDate.getSeconds()).padStart(2, '0');
-    let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
+      // string value to update the spreadsheet Message Tab
 
-    let newItem:string = JSON.parse('{"Timestamp": "'+ dateString +'", "ID":"M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "Task due date changed to ' + (moment(value?.toString()).format("L")) +'"}')
-    AllSelectedMessages.splice(0,0,newItem)
+      let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle().replace(regex, '').replace(/\n/g, ' '), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), comment.replace(regex, '').replace(/\n/g, ' ')]
 
-    // string value to update the spreadsheet Message Tab
-    const regex = /('(?=(,\s*')))|('(?=:))|((?=([:,]\s*))')|((?={)')|('(?=}))/g;
-    let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle().replace(regex, '').replace(/\n/g, ' '), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), ('Task due date changed to ' + (moment(value?.toString()).format("L"))).replace(regex, '').replace(/\n/g, ' ')]
+      AllSelectedMessages.splice(0,0,newItem)
+      // Update that message to observable object
+      AllFlowMessages.splice(0, 0, newItem)
+      //console.log("total message ", AllFlowMessages)
+      props.stores.roomInfo.activeFlowMessages = AllFlowMessages; //AllSelectedMessages
+      updateFlowData('Message', AllSelectedMessages[0]['ID'], '', updateMessage, '')
+      // Reset it again
+      setComment('')
+    } else if(openAssign === false && assignedTaksUser !== "" && prevSelectedUserIndex !== assignedUserIndex) {
+  /*  } else if(openAssign === false && (assignedTaksUser !== "" || prevSelectedUserIndex !== assignedUserIndex || (moment(new Date(prevSelectedDueDate)).format("L") !== moment(value?.toString()).format('L')))) { */
+      console.log("MSG ASSIGN UPDATED")
+      let doneDate = new Date()
+      let year = doneDate.getFullYear();
+      let month = String(doneDate.getMonth() + 1).padStart(2, '0');
+      let day = String(doneDate.getDate()).padStart(2, '0');
+      let hours = String(doneDate.getHours()).padStart(2, '0');
+      let minutes = String(doneDate.getMinutes()).padStart(2, '0');
+      let seconds = String(doneDate.getSeconds()).padStart(2, '0');
+      let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
 
-    AllFlowMessages.splice(0, 0, newItem)
-    props.stores.roomInfo.activeFlowMessages = AllFlowMessages; //AllSelectedMessages
-    updateFlowData('Message_DueDate', AllSelectedMessages[0]['ID'], assignedTaksUser, updateMessage, (moment(value?.toString()).format("L")))
+      let newItem:string = JSON.parse('{"Timestamp": "'+ dateString +'", "ID":"M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "Task has reassigned to ' + assignedTaksUser +'"}')
+      AllSelectedMessages.splice(0,0,newItem)
 
-    prevSelectedDueDate = moment(value?.toString()).format("L")
-    dateSelected = false
+      // string value to update the spreadsheet Message Tab
+      const regex = /('(?=(,\s*')))|('(?=:))|((?=([:,]\s*))')|((?={)')|('(?=}))/g;
+      let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle().replace(regex, '').replace(/\n/g, ' '), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), ('Task has reassigned to ' + assignedTaksUser).replace(regex, '').replace(/\n/g, ' ')]
+
+      AllFlowMessages.splice(0, 0, newItem)
+      props.stores.roomInfo.activeFlowMessages = AllFlowMessages; //AllSelectedMessages
+      updateFlowData('Message_Assign', AllSelectedMessages[0]['ID'], assignedTaksUser, updateMessage, '')
+      //console.log("USER UDATED")
+      /////////////////////////////////////////////////
+      prevSelectedUserIndex = assignedUserIndex
+      assignedTaksUser = ''
+      assignedUserIndex = -1
+      /////////////////////////////////////////////////
+    } else if(openAssign === false && dateSelected === true && (moment(new Date(prevSelectedDueDate)).format("L") !== moment(value?.toString()).format('L'))) {
+      console.log("DUE DATE UPDATED")
+      let doneDate = new Date()
+      let year = doneDate.getFullYear();
+      let month = String(doneDate.getMonth() + 1).padStart(2, '0');
+      let day = String(doneDate.getDate()).padStart(2, '0');
+      let hours = String(doneDate.getHours()).padStart(2, '0');
+      let minutes = String(doneDate.getMinutes()).padStart(2, '0');
+      let seconds = String(doneDate.getSeconds()).padStart(2, '0');
+      let dateString = month + '/' + day + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds
+
+
+
+      let newItem:string = JSON.parse('{"Timestamp": "'+ dateString +'", "ID":"M'+ (props.stores.roomInfo.activeFlowMessages.length+1) +'", "Station": "'+ getSelectedTaskTitle() +'", "Sender ID": "'+ props.stores.roomInfo.activeLoggedInUserId +'", "Sender": "'+ getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId) +'", "Message": "Task due date changed to ' + (moment(value?.toString()).format("L")) +'"}')
+      AllSelectedMessages.splice(0,0,newItem)
+
+      // string value to update the spreadsheet Message Tab
+      const regex = /('(?=(,\s*')))|('(?=:))|((?=([:,]\s*))')|((?={)')|('(?=}))/g;
+      let updateMessage:any = [dateString, ('M' + (props.stores.roomInfo.activeFlowMessages.length+1)), getSelectedTaskTitle().replace(regex, '').replace(/\n/g, ' '), props.stores.roomInfo.activeLoggedInUserId, getMessageUserInitial(props.stores.roomInfo.activeLoggedInUserId), ('Task due date changed to ' + (moment(value?.toString()).format("L"))).replace(regex, '').replace(/\n/g, ' ')]
+
+      AllFlowMessages.splice(0, 0, newItem)
+      props.stores.roomInfo.activeFlowMessages = AllFlowMessages; //AllSelectedMessages
+      updateFlowData('Message_DueDate', AllSelectedMessages[0]['ID'], assignedTaksUser, updateMessage, (moment(value?.toString()).format("L")))
+
+      prevSelectedDueDate = moment(value?.toString()).format("L")
+      dateSelected = false
+    }
   }
 
 
@@ -824,7 +883,7 @@ taskCount = taskList.length;
       return userName.toUpperCase()
     }
 
-    function getUserNameNormal(taskInfo:string) {
+    /* function getUserNameNormal(taskInfo:string) {
       let userName = ""
       //console.log(taskInfo, " fetching init")
       let userIdFromTaskInfo = taskInfo.split(':')[1]
@@ -835,7 +894,7 @@ taskCount = taskList.length;
         }
       }
       return userName;
-    }
+    } */
 
     function getMessageUserName(userId:string) {
       let userName = ""
@@ -949,6 +1008,7 @@ taskCount = taskList.length;
     assignedTaksUser = ''
     prevSelectedUserIndex = -1
     prevSelectedDueDate = ''
+    isAddNoteDialogActive = false
     dateSelected = false
     if(docDone) {
       setDocDone(false)
@@ -961,7 +1021,6 @@ taskCount = taskList.length;
     /* if(getTaskDueDate() === 'undefined') {
       onChange(getTaskDueDate())
     } */
-
   }
   //////////////////////////////////////////////////////////////////
   function updateGoogleSheet(sheet_Id:string, sheet_Name:string, matchDocIndex:string, matchColName:string, newColValue:string, updateType:string, msgInfo:any) {
@@ -1084,9 +1143,16 @@ taskCount = taskList.length;
       setDocDone(false)
       setDocSelected('') */
     }
-    /* return () => {
+   /*  const onClick = (e: MouseEvent) => {
+      if(openPicker) {
+        setOpenPicker(false)
+      }
+    }
+    window.addEventListener('click', onClick) */
 
-    } */
+    return () => {
+      /* window.removeEventListener('click', onClick) */
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[docDone, docSelected])
 
@@ -1109,6 +1175,7 @@ taskCount = taskList.length;
 
     // setting system props
     props.stores.roomInfo.activeScreenResolution = [cont_WH[0], cont_WH[1]]
+    //console.log(menuName, ">AAAAAAA")
 
   }, 200)
   //////////////////////////////////////////////////////////////////
@@ -1158,12 +1225,12 @@ taskCount = taskList.length;
     setDocDone(true)
   }
   //////////////////////////////////////////////////////////////////
-  function onAddNoteClick() {
+  /* function onAddNoteClick() {
     isAddNoteDialogActive = true
     if(docDone) {return}
     //console.log("ADD ANOTHER NOTE HERE")
     setOpen(true)
-  }
+  } */
   //////////////////////////////////////////////////////////////////
   function handleClose(){
     isAddNoteDialogActive = false
@@ -1179,7 +1246,28 @@ taskCount = taskList.length;
   function handleCloseAssign(){
     isAddNoteDialogActive = false
     //assignedUserIndex = -1
+
+    /* if(manualDate === "") {
+      onChange(getTaskDueDate())
+    } else if(value === 'undefined') {
+      onChange(manualDate)
+    } */
+    if(manualDate !== "") {
+      //console.log(isValidDate(manualDate), " +++++")
+      if(isValidDate(manualDate)) {
+        onChange(manualDate.toString())
+      } else {
+        onChange(getTaskDueDate())
+      }
+    }
+
+    //console.log(value.toString(), " --TV-- ", manualDate.toString())
+
     setOpenAssign(false);
+    /* if(value === 'undefined') {
+      onChange(manualDate)
+    } */
+    setManualDate('')
   };
   //////////////////////////////////////////////////////////////////
   function addCustomComment() {
@@ -1193,6 +1281,11 @@ taskCount = taskList.length;
     assignedUserName = ''
     handleCloseAssign()
   }
+
+  function isValidDate(_str:string) {
+    let isValid = moment(_str, 'MM/DD/YYYY',true).isValid();
+    return isValid;
+  }
   //////////////////////////////////////////////////////////////////
   //console.log(getTaskUserIndex(), " getIndex")
   //let userIndex = getTaskUserIndex()
@@ -1200,19 +1293,22 @@ taskCount = taskList.length;
  /*  const [selectedIndex, setSelectedIndex] = React.useState(-1); */
 
 
+ const options:any = []
+ Object(userData).data.map((item:any, index:number)=>
+   options[index] = {value: item['Full Name'], label:item['Full Name']}
+ )
 
-  /* function handleListItemClick(index:number) {
+  function handleListItemClick(index:number) {
     //assignedTaksUser = Object(userData).data[index]['Full Name'].toUpperCase()
     assignedUserName = Object(userData).data[index]['Full Name'].toUpperCase()
     // Send message to the list for this task modification
+    //assignedUserName = options[index]['value'].toUpperCase()
     assignedUserIndex = index
     setSelectedIndex(index);
-  }; */
+    setOpenUser(false)
+  };
 
-  const options:any = []
-  Object(userData).data.map((item:any, index:number)=>
-    options[index] = {value: item['Full Name'], label:item['Full Name']}
-  )
+
 
   /* function handleChange(){
     setPersonName('ABC')
@@ -1230,7 +1326,7 @@ taskCount = taskList.length;
     'Kelly Snyder',
   ]; */
 
-  function selectUserOption(_value:any) {
+  /* function selectUserOption(_value:any) {
     for (let i:number=0; i<options.length; i++) {
       //console.log(options[i].value, '===', _value)
       if(options[i] === _value) {
@@ -1241,15 +1337,17 @@ taskCount = taskList.length;
         //console.log(i, " iii")
       }
     }
-  }
+  } */
 
-  let mtop = isSmartphone() ? '15em' : '8em'
+  let mtop = isSmartphone() ? '13.5em'/* '15em' */ : '7.5em'/* '8em' */
   let tWidth = isSmartphone() ? '100%' : '78%'
   let iWidth = isSmartphone() ? '50%' : '40%'
   let fSize = isSmartphone() ? '3.4em' : '1.5em'
   let cHeight = isSmartphone() ? '1.4em' : '1.5em'
   let cLeft = isSmartphone() ? '14%' : '20%'
-  let ctop = isSmartphone() ? '-3em' : '-1.5em'
+  let ctop = isSmartphone() ? '-5em' : '-2em'
+
+  let pickerValue = openPicker ? 'block' : 'none'
 
   /* const handleChange = (selectedOption:any) => {
     console.log('handleChange', selectedOption);
@@ -1260,24 +1358,75 @@ taskCount = taskList.length;
     //console.log(e, " due date")
     dateSelected = true
     onChange(e)
+
+    // Hide the picker
+    setOpenPicker(false)
+  }
+
+  function updateDateWithManual(_val:string) {
+    if(value !== undefined) {
+      onChange('undefined')
+    }
+    //console.log(_val, value)
+    /* onChange(_val) */
+    dateSelected = true
+    setManualDate(_val)
+    /* if(openPicker) {
+      setOpenPicker(false)
+    } */
+  }
+
+  function onDateFiledClick() {
+    //console.log("date input click")
+    if(openPicker === false) {
+      setOpenPicker(true)
+    } else {
+      setOpenPicker(false)
+    }
+    //setOpenPicker(true)
+  }
+
+  function closeAssignPopup() {
+    isAddNoteDialogActive = false
+    if(manualDate === "") {
+      onChange(getTaskDueDate())
+    }
+    setOpenAssign(false)
+  }
+
+  function toggleUserDisplay() {
+    if(openUser)
+      setOpenUser(false)
+    else
+      setOpenUser(true)
   }
 
   //console.log(getUserNameNormal(String(selectedItem[docSelected])).length, "-----")
   //console.log(moment(value?.toString()).format('MM/DD/YYYY'), " VALUE----")
   //console.log(value, " VALUEEEE")
+  //console.log(options, " ----", [selectedIndex], " ---- ")
+  let dispOptionSelected = assignedUserName !== '' ? assignedUserName : getUserName(selectedItem[docSelected])
+  let isVisible = openUser ? 'block' : 'none'
   //////////////////////////////////////////////////////////////////
   return <div className={classes.container}>
     { openAssign ?
     <div style={{position:'relative', width:'90%', top:mtop, display:'flex', alignItems:'center', flexDirection:'column', left:'5%'}}>
     <div className={classes.rootList}>
-      <Calendar onChange={e => getDueDate(e)/* onChange */} value={moment(value?.toString()).format('L')} />
+      {/* <Calendar onChange={e => getDueDate(e)} value={moment(value?.toString()).format('L')} /> */}
+      <textarea placeholder='Enter comments...' style={{position:'relative', width:'100%', /* height:'6em',  *//* border:'1px solid #00000070', */ fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:isSmartphone() ? '2.2em' : '1.5em', height:isSmartphone() ? '200px' : '120px', backgroundColor:'#808080', color:'#000000', padding:'0.5em', outline:'none', border:'none', borderRadius:'0', boxShadow:'none !important'}}
+        value={comment}
+        onChange={event =>(setComment(event.target.value))}
+        rows={5}
+        cols={5}
+
+        />
     </div>
   <div style={{position:'relative', width:'700px', maxWidth:tWidth, display:'flex'}}>
-    <div style={{position:'relative', width:iWidth, textAlign:'center', fontFamily:'DINCondensed-Bold', fontSize:fSize, top:'-0.2em', color:'#808080'}} >
+    <div style={{position:'relative', width:iWidth, textAlign:'center', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:fSize, top:'-0.2em', color:'#808080'}} >
       <p>CHANGE OWNER</p>
     </div>
-    <div style={{position:'relative', width:iWidth, /* left:'50%', */ height:cHeight/* '1.5em' */, top:'0.5em', fontFamily:'DINCondensed-Bold', fontSize:fSize, backgroundColor:'#808080', left:cLeft/* '20%' */}}>
-    <Select menuPlacement='top' maxMenuHeight={200} styles={customStyles} options={options}
+    <div style={{position:'relative', width:iWidth, /* left:'50%', */ height:cHeight/* '1.5em' */, top:'0.5em', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:fSize, backgroundColor:'#808080', left:cLeft/* '20%' */}}>
+    {/* <Select menuPlacement='top' maxMenuHeight={200} styles={customStyles} options={options}
         value={options[selectedIndex]}
         defaultValue={getUserNameNormal(String(selectedItem[docSelected])).length !== 0 ? {value: getUserNameNormal(String(selectedItem[docSelected])), label:getUserNameNormal(String(selectedItem[docSelected]))} : {value: "Select an option", label:"Select an option"}}
         placeholder = {getUserNameNormal(String(selectedItem[docSelected])).length !== 0 ? getUserNameNormal(String(selectedItem[docSelected])) : "Select User"}
@@ -1289,7 +1438,28 @@ taskCount = taskList.length;
               neutral50: '#00000090',  // Placeholder color
           },
       })}
-        />
+        /> */}
+          <div onClick={() => toggleUserDisplay()} style={{position:'relative', display:'flex', width:'100%', height:'2em'}}>
+            <div style={{position:'relative', width:'100%'}}>
+            <p style={{position:'relative', top:'-0.8em', fontFamily:'DINCondensed-Bold', fontWeight:'100', left:isSmartphone() ? '0.25em' : '0.4em', width:'90%'}}>{dispOptionSelected}</p>
+            </div>
+            <div style={{position:'relative', top:'-0.1em', textAlign:'right', width:'10%', color:'#FFFFFF', right:isSmartphone() ? '0.8em' : '0.5em'}}>
+              <ExpandMore style={{color:'#FFFFFF', width:isSmartphone() ? '85px' : '40px', height:isSmartphone() ? '85px' : '40px'}}/>
+            </div>
+          </div>
+          <List component="nav" style={{display:isVisible, position:'relative', backgroundColor:'#FFFFFF', top:'-0.4em', height:isSmartphone() ? '350px' : '210px', overflow:'auto', zIndex:'9999999999', padding:0}}>
+            {
+            Object(userData).data.map((item:any, index:number)=>
+              <ListItem button
+                  selected={selectedIndex === index}
+                  style={{backgroundColor : (selectedIndex === index) ? '#F7931E40' : '#FFFFFF', border:'1px solid #00000070', marginBottom:'0em', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1em'}}
+                  onClick={(event) => handleListItemClick(index)}
+                >
+              <ListItemText disableTypography={true} primary={item['Full Name'].toUpperCase()} />
+              </ListItem>
+            )}
+          </List>
+
         {/* <div style={{position:'relative', width:'100%'}}>
           <div style={{position:'relative', top:'0.2em', left:'0.5em', color:'#00000080'}}>John Doe</div>
           <ArrowExpandMore style={{position:'relative', right:0}} />
@@ -1297,28 +1467,48 @@ taskCount = taskList.length;
     </div>
   </div>
     <div style={{position:'relative', width:'700px' ,maxWidth:tWidth/* '78%' */, display:'flex', top:ctop/* '-1.5em' */}}>
-      <div style={{position:'relative', width:iWidth/* '40%' */, textAlign:'center', fontFamily:'DINCondensed-Bold', fontSize:fSize/* '1.5em' */, top:'-0.2em', color:'#808080'}} >
+      <div style={{position:'relative', width:iWidth/* '40%' */, textAlign:'center', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:fSize/* '1.5em' */, top:'-0.2em', color:'#808080'}} >
         <p>CHANGE DUE DATE</p>
       </div>
-      <div style={{position:'relative', width:iWidth/* '40%' */, height:cHeight/* '1.5em' */, top:'0.5em', fontFamily:'DINCondensed-Bold', fontSize:fSize/* '1.5em' */, backgroundColor:'#808080', left:cLeft/* '20%' */}}>
-        <div style={{position:'relative', top:'0.2em', left:'0.5em', color:'#00000080'}}>{value !== undefined ? moment(value?.toString()).format('L') : ''}</div>
+      <div style={{position:'relative', width:iWidth/* '40%' */, height:cHeight/* '1.5em' */, top:'0.5em', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:fSize/* '1.5em' */, backgroundColor:'#808080', left:cLeft/* '20%' */}}>
+        <div style={{position:'relative', top:'0em/* -0.15em */', left:'0em', color:'#00000080'}}>{/* {value !== undefined ? moment(value?.toString()).format('L') : ''} */}
+
+        {/* <TextField
+            id="date"
+            type="date"
+            defaultValue={value !== undefined ? moment(value?.toString()).format('L') : ''}
+            onChange={(e) => getDueDate(e)}
+            style={{position:'relative', width:'100%'}}
+            inputProps={{style: {fontSize: isSmartphone() ? '3em' : '1.5em', height: isSmartphone() ? '1.5em' : '1.5em', color: '#000000', padding: '3px', width: '100%', left:'0%', textAlign:'left', fontFamily:'DINCondensed-Bold', marginLeft:'0.2em'}}}
+            InputProps={{ disableUnderline: true }}
+          /> */}
+          <input value={value !== 'undefined' ? moment(value?.toString()).format('L') : manualDate} type='text' style={{fontSize: isSmartphone() ? '1em' : '1em', height: isSmartphone() ? '1.5em' : '1em', color: '#000000', padding: '3px', width: '85%', left:'0%', textAlign:'left', fontFamily:'DINCondensed-Bold', fontWeight:'100', marginLeft:isSmartphone() ? '0.2em' : '0.4em', backgroundColor:'rgba(0,0,0,0)', border:'0', marginTop:isSmartphone() ? '-0.1em' : '0.1em', zIndex:'99999', position:'relative'}} onFocus={() => setOpenPicker(false)} /* onClick={() => onDateFiledClick()} */ onChange={event =>(updateDateWithManual(event.target.value))} />
+
+          <div style={{position:'relative', textAlign:'right', right:'0.2em', top:isSmartphone() ? '-1.4em' : '-1.2em', color:'#FFFFFF'}}>
+            <CalenderSelector style={{width:isSmartphone() ? 45 : 25, height:isSmartphone() ? 45 : 25}} onClick={() => onDateFiledClick()} />
+          </div>
+
+          <div style={{position:'absolute', top:'1.5em', left:'-17em', zIndex:'99999', display:pickerValue}}>
+          <Calendar  onChange={e => getDueDate(e)} value={value !== 'undefined' ? moment(value?.toString()).format('L') : ''} />
+          </div>
+        </div>
       </div>
     </div>
     <div style={{position:'relative', width:isSmartphone() ? '100%' : '80%', textAlign:'center', top:isSmartphone() ? '1em' : '1em'}}>
       <div style={{position:'relative', width:'100%', height:'1px', backgroundColor:'#00000080'}}></div>
-      <img onClick={() => setOpenAssign(false)} style={{width:isSmartphone() ? '9em' : '4em', userSelect:'none', position:'relative', top:isSmartphone() ? '-5.6em' : '-3.1em', left:isSmartphone() ? '-13em' : '-11em'}} src={btnCancelComment} draggable={false} alt="" />
-      <img onClick={() => changeAssignedUser()} style={{width:isSmartphone() ? '10em' : '5em', userSelect:'none', position:'relative', top:isSmartphone() ? '-5.2em' : '-2.6em', left:isSmartphone() ? '-4em' : '-2em'}} src={btnAddComment} draggable={false} alt="" />
+      <img onClick={() => closeAssignPopup()/* setOpenAssign(false) */} style={{width:isSmartphone() ? '9em' : '4em', userSelect:'none', position:'relative', top:isSmartphone() ? '-5.6em' : '-3.1em', left:isSmartphone() ? '-13em' : '-11em'}} src={btnCancelComment} draggable={false} alt="" />
+      <img onClick={() => changeAssignedUser()} style={{width:isSmartphone() ? '10em' : '5em', userSelect:'none', position:'relative', top:isSmartphone() ? '-5.2em' : '-2.6em', left:isSmartphone() ? '-4em' : '-2em'}} src={btnOk} draggable={false} alt="" />
     </div>
     </div>
      :
-      <div id='containerHolder' style={{position:'relative', top:isSmartphone() ? '14.4em' : '7.4em', display:'flex', left:'0'}} >
-        <div style={{position:'relative', width:isSmartphone() ? '100%' : '100%', height:'auto', backgroundColor:'white', border:'0px solid black',top:'1em', marginRight:'0em', textAlign:'center', left:'2.5em', fontFamily:'DINCondensed-Bold', userSelect:'none'}}>
+      <div id='containerHolder' style={{position:'relative', top:isSmartphone() ? '13em'/* '14.4em' */ : '6.4em'/* '7.4em' */, display:'flex', left:'0'}} >
+        <div style={{position:'relative', width:isSmartphone() ? '100%' : '100%', height:'auto', backgroundColor:'white', border:'0px solid black',top:'1em', marginRight:'0em', textAlign:'center', left:'2.5em', fontFamily:'DINCondensed-Bold', fontWeight:'100', userSelect:'none'}}>
 
         <div style={{position:'relative', display:'flex'}}>
-          <div style={{fontSize:isSmartphone() ? '8em' : '3.5em', color:'#F15A24', fontWeight:'700', position:'relative', left:isSmartphone() ? '0.65em' : '0.6em', top:isSmartphone() ? '-0.1em' : '-0.1em', width:isSmartphone() ? '120px' : '77px'}}> {getDaysRemaining(Object(selectedItem)['Due Date'])}</div>
-          <div style={{fontSize:isSmartphone() ? '5em' : '2.5em', color:'#F15A24', fontWeight:'700', position:'relative', left:isSmartphone() ? '2em' : '2.3em', top:isSmartphone() ? '-0.2em' : '-0.3em'}}>
-            <p style={{position:'relative', textAlign:'left', fontSize:'0.5em', color:'#00000090'}}>DUE</p>
-            <p style={{position:'relative', textAlign:'left', fontSize:'0.5em', color:'#00000090', top:'-1em'}}> {Object(selectedItem)['Due Date'] !== 'undefined' ? Object(selectedItem)['Due Date'] : ''}</p>
+          <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '8em' : '3.5em', color:'#F15A24', fontWeight:'100', position:'relative', left:isSmartphone() ? '0.5em' : '0.5em', top:isSmartphone() ? '-0.1em' : '-0.1em', width:isSmartphone() ? '120px' : '77px'}}> {getDaysRemaining(Object(selectedItem)['Due Date'])}</div>
+          <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '5em' : '2.5em', color:'#F15A24', fontWeight:'100', position:'relative', left:isSmartphone() ? '2em' : '2.3em', top:isSmartphone() ? '-0.2em' : '-0.3em'}}>
+            <p style={{position:'relative', textAlign:'left', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'0.5em', color:'#00000090'}}>DUE</p>
+            <p style={{position:'relative', textAlign:'left', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'0.5em', color:'#00000090', top:'-1em'}}> {Object(selectedItem)['Due Date'] !== 'undefined' ? Object(selectedItem)['Due Date'] : ''}</p>
           </div>
         </div>
           {
@@ -1330,7 +1520,7 @@ taskCount = taskList.length;
 
           <div style={{position:'relative', width:isSmartphone() ? '10em' : '4em', height:isSmartphone() ? '10em' : '4em', left:isSmartphone() ? '3.3em' : '2.5em', borderRadius:'50%', backgroundColor:'#006837', textAlign:'center', top:isSmartphone() ? '-21.5em' : '-9em'}}>
 
-          <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '5em' : '2em', position:'relative', top:'0.45em', color:'#FFFFFF'}}>{getCompletedTaskCount(0)}</div>
+          <div style={{fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:isSmartphone() ? '5em' : '2em', position:'relative', top:'0.45em', color:'#FFFFFF'}}>{getCompletedTaskCount(0)}</div>
           </div>
 
         {/* Loop here */}
@@ -1341,15 +1531,15 @@ taskCount = taskList.length;
           <div style={{position:'relative', top:isSmartphone() ? '-22em' : '-9.1em', height:isSmartphone() ? '14em' : '6.2em', left:'1em'}}>
             <div style={{position:'relative', width:isSmartphone() ? '2em' : '0.6em', height:isSmartphone() ? ((taskList.length - 1) === index) ? '14em' : '21em' : ((taskList.length - 1) === index) ? '5em' : '8em', backgroundColor:'black', marginLeft:isSmartphone() ? '6.3em' : '3.3em', borderRadius:'2px/* 12px */'}}></div>
             <div style={{position:'relative', width:isSmartphone() ? '9em' : '4em', height:isSmartphone() ? '9em' : '4em', left:isSmartphone() ? '2.1em' : '1.3em', borderRadius:'50%', backgroundColor:(getTaskUserInitials(String(selectedItem[item])) === dispUserName) ? '#F7931E' : 'lightgrey', textAlign:'center', top:isSmartphone() ? ((taskList.length - 1) === index) ? '-9.5em' : '-16.5em' : ((taskList.length - 1) === index) ? '-3.3em' : '-6.3em', border:isSmartphone() ? (getTaskUserInitials(String(selectedItem[item])) === dispUserName) ? '10px solid #F7931E' : '10px solid black' : (getTaskUserInitials(String(selectedItem[item])) === dispUserName) ? '5px solid #F7931E' : '5px solid black'}}>
-              <div style={{fontSize:isSmartphone() ? '5em' : '2.2em', color:(getTaskUserInitials(String(selectedItem[item])) === dispUserName) ? '#FFFFFF' : 'black', fontWeight:'700', position:'relative', top:'0.3em'}}>{getTaskUserInitials(String(selectedItem[item]))}
+              <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '5em' : '2.2em', color:(getTaskUserInitials(String(selectedItem[item])) === dispUserName) ? '#FFFFFF' : 'black', fontWeight:'100', position:'relative', top:'0.3em'}}>{getTaskUserInitials(String(selectedItem[item]))}
               </div>
             </div>
           </div>
           <div style={{position:'relative', width:'100%', top:(getTaskUserInitials(String(selectedItem[item])) === dispUserName) ? isSmartphone() ? '-5em' : '-4.3em' : isSmartphone() ? '-4.7em' : '-4.1em', left:isSmartphone() ? '2em' : '3em', fontSize:isSmartphone() ? '4em' : '2em', height:'3.8em'}}>
-          <p style={{position:'relative', textAlign:'left'}}>{(item.split('TASK - ')[1])}</p>
+          <p style={{fontFamily:'DINCondensed-Bold', fontWeight:'100', position:'relative', textAlign:'left'}}>{(item.split('TASK - ')[1])}</p>
           {
           (getTaskUserInitials(String(selectedItem[item])) === dispUserName) ?
-          <p style={{position:'relative', fontSize:isSmartphone() ? '0.6em' : '0.5em', textAlign:'left', top:isSmartphone() ? '-1.7em' : '-2em'}}>DUE: {selectedItem[item].split(':')[2] !== 'undefined' ? selectedItem[item].split(':')[2] : ''}</p> : '' }
+          <p style={{position:'relative', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:isSmartphone() ? '0.6em' : '0.5em', textAlign:'left', top:isSmartphone() ? '-1.7em' : '-2em'}}>DUE: {selectedItem[item].split(':')[2] !== 'undefined' ? selectedItem[item].split(':')[2] : ''}</p> : '' }
 
           </div>
           <div style={{position:'relative', width:'10%', textAlign:'right', top:isSmartphone() ? '-15.5em' : '-6.7em', right:isSmartphone() ? '5em' : '4em'}}>
@@ -1362,11 +1552,11 @@ taskCount = taskList.length;
         <>
           <div style={{position:'relative', width:'100%', display:'flex'}}>
             <div style={{position:'relative', width:isSmartphone() ? '9em' : '4em', height:isSmartphone() ? '9em' : '4em', left:isSmartphone() ? '4em' : '2.5em', borderRadius:'50%', backgroundColor:(getTaskUserInitials(String(selectedItem[docSelected])) === dispUserName) ? '#F7931E' : 'lightgrey', textAlign:'center', top:isSmartphone() ? '-5em' : '-2.5em', border:isSmartphone() ? (getTaskUserInitials(String(selectedItem[docSelected])) === dispUserName) ? '10px solid #F7931E' : '10px solid black' : (getTaskUserInitials(String(selectedItem[docSelected])) === dispUserName) ? '5px solid #F7931E' : '5px solid black'}}>
-              <div style={{fontSize:isSmartphone() ? '5.5em' : '2.5em', color:(getTaskUserInitials(String(selectedItem[docSelected])) === dispUserName) ? '#FFFFFF' : 'black', fontWeight:'700', position:'relative', top:'0.2em'}}>{getTaskUserInitials(String(selectedItem[docSelected]))}</div>
+              <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '5.5em' : '2.5em', color:(getTaskUserInitials(String(selectedItem[docSelected])) === dispUserName) ? '#FFFFFF' : 'black', fontWeight:'100', position:'relative', top:'0.2em'}}>{getTaskUserInitials(String(selectedItem[docSelected]))}</div>
               </div>
               <div style={{position:'relative', width:'50%', fontSize:isSmartphone() ? '4em' : '2.3em', top:isSmartphone() ? '-1.9em' : '-2em', left:isSmartphone() ? '1.8em' : '2.55em'}}>
-              <p style={{position:'relative', textAlign:'left'}}>{getSelectedTaskTitle()}</p>
-              <p style={{position:'relative', textAlign:'left', fontSize: isSmartphone() ? '0.7em' : '0.6em', top:isSmartphone() ? '-1.5em' : '-1.9em', left:'0.1em'}}>DUE : {getTaskDueDate()}</p>
+              <p style={{fontFamily:'DINCondensed-Bold', fontWeight:'100', position:'relative', textAlign:'left'}}>{getSelectedTaskTitle()}</p>
+              <p style={{fontFamily:'DINCondensed-Bold', fontWeight:'100', position:'relative', textAlign:'left', fontSize: isSmartphone() ? '0.7em' : '0.6em', top:isSmartphone() ? '-1.5em' : '-1.9em', left:'0.1em'}}>DUE : {getTaskDueDate()}</p>
               {/* <Edit style={{position:'relative', top:'-4em', left:'0em', textAlign:'left', width:'100%', height:'1.3em'}} /> */}
               </div>
 
@@ -1394,8 +1584,8 @@ taskCount = taskList.length;
             </div>
           <div style={{position:'relative', width:isSmartphone() ? '92%' : '94%', left:'0%', height:'2px', backgroundColor:'#000000', top:isSmartphone() ? '-10em' : '-7em'}}></div>
           <div>
-            <p style={{position:'relative', fontSize:isSmartphone() ? '2.8em' : '1.4em', color:'#00000070', top:isSmartphone() ? '-3.5em' : '-5.2em', left:isSmartphone() ? '6.2em' : '7.6em', textAlign:'left'}}>ASSIGNED TO</p>
-            <p style={{position:'relative', fontSize:isSmartphone() ? '3.8em' : '2em', color:'#000000', top:isSmartphone() ? '-3.8em' : '-4.9em', left:isSmartphone() ? '4.6em' : '5.25em', textAlign:'left'}}>{assignedTaksUser !== '' ? assignedTaksUser : getUserName(String(selectedItem[docSelected]))}</p>
+            <p style={{position:'relative', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:isSmartphone() ? '2.8em' : '1.4em', color:'#00000070', top:isSmartphone() ? '-3.5em' : '-5.2em', left:isSmartphone() ? '6.2em' : '7.6em', textAlign:'left'}}>ASSIGNED TO</p>
+            <p style={{position:'relative', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:isSmartphone() ? '3.8em' : '2em', color:'#000000', top:isSmartphone() ? '-3.8em' : '-4.9em', left:isSmartphone() ? '4.6em' : '5.25em', textAlign:'left'}}>{assignedTaksUser !== '' ? assignedTaksUser : getUserName(String(selectedItem[docSelected]))}</p>
 
             {/* loop to show doc task list */}
             <div style={{position:'relative', display:'flex'}}>
@@ -1403,16 +1593,16 @@ taskCount = taskList.length;
               <img style={{position:'relative', width:isSmartphone() ? '6em' : '3em', userSelect:'none', left:isSmartphone() ? '-11em' : '11.8em', top:isSmartphone() ? '1em' : '2em'}} draggable={false} src={viewDocIcon}
                 alt="" />
               </div>
-              <div style={{position:'relative', width:'50%', top:isSmartphone() ? '-4em' : '-5.3em', left:isSmartphone() ? '4.2em' : '5.2em', fontSize:isSmartphone() ? '4em' : '2em', textAlign:'left'}}>{selectedItem['Doc Ref']}</div>
+              <div style={{position:'relative', width:'50%', top:isSmartphone() ? '-4em' : '-5.3em', left:isSmartphone() ? '4.2em' : '5.2em', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:isSmartphone() ? '4em' : '2em', textAlign:'left'}}>{selectedItem['Doc Ref']}</div>
             </div>
 
             <div style={{position:'relative', width:isSmartphone() ? '95%' : '100%', textAlign:'right', top:isSmartphone() ? '-29.8em' : '-17.2em', right:isSmartphone() ? '4%' : '8%'}}>
-              <div><ArrowForwardIcon onClick={() =>onChangeAssignClick()}  style={{width:isSmartphone() ? '4em' : '2em', height:isSmartphone() ? '4em' : '2em', color:'black', opacity:docDone ? 0 : 1}} /></div>
+              <div><ArrowForwardIcon /* onClick={() =>onChangeAssignClick()} */  style={{width:isSmartphone() ? '4em' : '2em', height:isSmartphone() ? '4em' : '2em', color:'black', opacity:docDone ? 0 : 1}} /></div>
             </div>
 
             <div style={{position:'relative', width:isSmartphone() ? '92%' : '94%', left:'0%', height:'2px', backgroundColor:'#000000', top:isSmartphone() ? '-18em' : '-13em'}}></div>
             <div style={{position:'relative', width:'90%', left:'0%', height:'2px', top:isSmartphone() ? '-18.3em' : '-11em', textAlign:'center'}}>
-              <img onClick={()=>onAddNoteClick()} style={{position:'relative', width:isSmartphone() ? '11em' : '6em', height:isSmartphone() ? '11em' : '6em', top:isSmartphone() ? '-5.5em' : '-5.1em', opacity:docDone ? 0 : 1}} src={addNoteIcon} alt='' />
+              <img onClick={()=>onChangeAssignClick()/* onAddNoteClick() */} style={{position:'relative', width:isSmartphone() ? '11em' : '6em', height:isSmartphone() ? '11em' : '6em', top:isSmartphone() ? '-5.5em' : '-5.1em', opacity:docDone ? 0 : 1}} src={addNoteIcon} alt='' />
             </div>
 
           </div>
@@ -1420,8 +1610,8 @@ taskCount = taskList.length;
           <div style={{position:'relative', top:isSmartphone() ? '-5.5em' : '-8.5em', left:'0em', textAlign:'left', fontSize:isSmartphone() ? '3em' : '1.5em'}}>
             {AllSelectedMessages.map((Item:any, index:number)=>
               <div style={{position:'relative', top:(index*-2+'em')}}>
-              <p style={{position:'relative', fontSize:'1em', left:'1em', color:'#00000070', top:'0.2em', width:'90%'}}>{getMessageUserName(Item['Sender ID'])} {Item['Timestamp']}</p>
-              <p style={{position:'relative', fontSize:'1.2em', left:'0.8em', color:'#000000', top:'-1em', width:'90%'}}>{Item['Message']}</p>
+              <p style={{position:'relative', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1em', left:'1em', color:'#00000070', top:'0.2em', width:'90%'}}>{getMessageUserName(Item['Sender ID'])} {Item['Timestamp']}</p>
+              <p style={{position:'relative', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1.2em', left:'0.8em', color:'#000000', top:'-1em', width:'90%'}}>{Item['Message']}</p>
               <div style={{position:'relative', width:isSmartphone() ? '92%' : '94%', left:'0%', height:'2px', backgroundColor:'#000000', top:isSmartphone() ? '-1.8em' : '-1.5em'}}></div>
               </div>
             )}
@@ -1440,15 +1630,15 @@ taskCount = taskList.length;
         },
     }}
     >
-      <DialogTitle disableTypography={true} style={{fontSize: isSmartphone() ? '2.5em' : '1.5em', fontWeight:700, textAlign:'center'}}>ADD NOTES</DialogTitle>
+      <DialogTitle disableTypography={true} style={{fontFamily:'DINCondensed-Bold', fontSize: isSmartphone() ? '2.5em' : '1.5em', fontWeight:'100', textAlign:'center'}}>ADD NOTES</DialogTitle>
         <DialogContent style={{border:'0px solid black', position:'relative', height:isSmartphone() ? '19em' : '13em'}}>
           {/* <TextareaAutosize minRows={3} placeholder='your comments here...' style={{position:'relative', width:'100%', height:'6em', border:'1px solid #00000070', fontFamily:'DINRegular', fontSize:'2em'}}  /> */}
-          <textarea placeholder='your comments here...' style={{position:'relative', width:'100%', /* height:'6em',  */border:'1px solid #00000070', fontFamily:'DINRegular', fontSize:isSmartphone() ? '2em' : '1.2em'}}
+          {/* <textarea placeholder='your comments here...' style={{position:'relative', width:'100%', border:'1px solid #00000070', fontFamily:'DINRegular', fontSize:isSmartphone() ? '2em' : '1.2em'}}
             value={comment}
             onChange={event =>(setComment(event.target.value))}
             rows={5}
             cols={5}
-          />
+          /> */}
           <div style={{position:'relative', width:isSmartphone() ? '100%' : '100%', textAlign:'right', top:isSmartphone() ? '0.5em' : '0.5em'}}>
             {/* <button style={{position:'relative', transform:isSmartphone() ? 'scale(1.5)' : 'scale(1.2)'}}>ADD</button> */}
             <img onClick={() => addCustomComment()} style={{width:isSmartphone() ? '5.5em' : '4em', userSelect:'none'}} src={btnGo} draggable={false} alt="" />
@@ -1486,10 +1676,10 @@ taskCount = taskList.length;
           <Calendar />
         </div> */}
         <div style={{position:'relative', width:'100%', display:'flex'}}>
-          <div style={{position:'relative', width:'50%', textAlign:'center', fontFamily:'DINCondensed-Bold', fontSize:'1.5em', top:'-0.2em', color:'#808080'}} >
+          <div style={{position:'relative', width:'50%', textAlign:'center', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1.5em', top:'-0.2em', color:'#808080'}} >
             <p>CHANGE OWNER</p>
           </div>
-          <div style={{position:'relative', width:'50%', /* left:'50%', */ height:'1.5em', top:'0.5em', fontFamily:'DINCondensed-Bold', fontSize:'1.5em', backgroundColor:'#808080'}}>
+          <div style={{position:'relative', width:'50%', /* left:'50%', */ height:'1.5em', top:'0.5em', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1.5em', backgroundColor:'#808080'}}>
           {/* <Dropdown className={classes.ddRoot}  placeholderClassName={classes.ddPlaceHolder} arrowClassName={classes.ddArrows} options={options}  value={options[0]} placeholder="Select an option"
           arrowClosed={<span className={classes.ddArrows} />}
           /> */}
@@ -1506,10 +1696,10 @@ taskCount = taskList.length;
           </div>
         </div>
           <div style={{position:'relative', width:'100%', display:'flex'}}>
-            <div style={{position:'relative', width:'50%', textAlign:'center', fontFamily:'DINCondensed-Bold', fontSize:'1.5em', top:'-0.2em', color:'#808080'}} >
+            <div style={{position:'relative', width:'50%', textAlign:'center', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1.5em', top:'-0.2em', color:'#808080'}} >
               <p>CHANGE DUE DATE</p>
             </div>
-            <div style={{position:'relative', width:'50%', /* left:'50%', */ height:'1.5em', top:'0.5em', fontFamily:'DINCondensed-Bold', fontSize:'1.5em', backgroundColor:'#808080'}}>
+            <div style={{position:'relative', width:'50%', /* left:'50%', */ height:'1.5em', top:'0.5em', fontFamily:'DINCondensed-Bold', fontWeight:'100', fontSize:'1.5em', backgroundColor:'#808080'}}>
               <div>10/12/2023</div>
             </div>
           </div>

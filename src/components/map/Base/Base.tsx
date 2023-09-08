@@ -24,6 +24,9 @@ import {useGesture} from 'react-use-gesture'
 import { getOnRemote, getRemoteMenuStatus } from '../Participant/RemoteParticipant' */
 //import { getContDim/* , getTotalTaskCount  */} from '../UI/ViewMode'
 import { getAddNoteDialogStatus } from '../UI/DocMode'
+/* import { getScreenName } from '../UI/TitleView'
+import { getScreenNameMode } from '../UI/ViewMode' */
+
 /* import { getFlowCount } from '@components/App' */
 
 //  utility
@@ -488,7 +491,7 @@ export const Base: React.FC<MapProps> = (props: MapProps) => {
     {
       onDragStart: ({buttons, xy, event}) => {
 
-        event?.preventDefault()
+       /*  event?.preventDefault() */
 
         document.body.focus()
         mem.dragging = true
@@ -609,11 +612,14 @@ export const Base: React.FC<MapProps> = (props: MapProps) => {
         //}
         }
 
-        event?.preventDefault()
-        event?.stopPropagation()
+       /*  event?.preventDefault()
+        event?.stopPropagation() */
         /////////////////////////////////////////////////////////
         // Disable Dragging
         let isAddNoteDialogOpen = getAddNoteDialogStatus()
+
+        //console.log(isAddNoteDialogOpen, " isAddNoteDialogOpen")
+
         if(isAddNoteDialogOpen) {return}
         /////////////////////////////////////////////////////////
 
@@ -701,9 +707,12 @@ export const Base: React.FC<MapProps> = (props: MapProps) => {
             ///////////////////////////////////////////////////////
             // Disabling move in X direction [List And ]
             // Check mode
+
             if(menuName === 'list' || menuName === 'docview' || menuName === 'docdetailview') {
               newMatrix.e = 0
             }
+
+
             ///////////////////////////////////////////////////////
             //let totalFlowData = getFlowCount()
             /* let totalFlowData = getTotalTaskCount() */
@@ -713,19 +722,32 @@ export const Base: React.FC<MapProps> = (props: MapProps) => {
             /* let dragDiffY = ((contentRes[1] - (props.stores.map.screenSize[1])))
             let dragDiffX = (contentRes[0] - (props.stores.map.screenSize[0])) */
 
+
+
+
+
+
             let dragDiffY = ((screenWH[1] - (props.stores.map.screenSize[1])))
             let dragDiffX = (screenWH[0] - (props.stores.map.screenSize[0]))
 
 
+            //console.log(dragDiffY, " ---- ", newMatrix.f)
             //console.log(contentRes[0], " - X : Y - ", props.stores.map.screenSize[0])
             //console.log(dragDiffX, " dragDiff - ", newMatrix.e)
+            //console.log(Math.abs(dragDiffY) , '-', Math.abs(dragDiffY/6), '>>>', menuName)
+            /* let extraPos = isSmartphone() ? 350 : (menuName === 'flow' ? (dragDiffY + 250) : (menuName === 'docview' ? (dragDiffY + 100) : (Math.abs(dragDiffY - Math.abs(dragDiffY/3))))) */
 
-            let extraPos = isSmartphone() ? 250 : 170
+            let extraPos = isSmartphone() ? (menuName === 'flow' ? (dragDiffY + 350) : menuName === 'docview' ?  (dragDiffY + 100) : (Math.abs(dragDiffY - Math.abs(dragDiffY/3)))) : (menuName === 'flow' ? (dragDiffY + 250) : (menuName === 'docview' ? (dragDiffY + 100) : (Math.abs(dragDiffY - Math.abs(dragDiffY/3)))))
+
+
+            /* let extraPos = isSmartphone() ? 350 : 250 */
+            /* let extraPos = isSmartphone() ? 250 : 170 */
             /* let extraPos = isSmartphone() ? -100 : -100 */
-            if(dragDiffY < 250){
+            if(dragDiffY < 250) {
               newMatrix.f = 0
               return
-            } else if(newMatrix.f < -(dragDiffY + extraPos)) {
+            /* } else if(newMatrix.f < -(dragDiffY + extraPos)) { */
+            } else if(newMatrix.f < (- (extraPos))) {
               newMatrix.f = 0
               return
             }
@@ -737,6 +759,21 @@ export const Base: React.FC<MapProps> = (props: MapProps) => {
               newMatrix.e = 0
               return
             }
+
+
+            // Control moving to x direction only
+            //newMatrix.f = 0
+            /* let screenName = getScreenName()
+            let screenNameMode = getScreenNameMode()
+            console.log(screenName, " --Moving-- ", delta[0], " --- ", delta[1], " POS",  xy)
+            if(screenName === "TitleView") {
+              return
+            }
+            if(screenNameMode === "ViewMode") {
+              console.log(screenName, " --DRAGGING-- ")
+            } */
+
+
 
             //if(delta[1] === 0) {
             //newMatrix.e = 0 // Movement rectricted to Y axis only
@@ -761,6 +798,23 @@ export const Base: React.FC<MapProps> = (props: MapProps) => {
               newMatrix.f = 0
             }
 
+            if(menuName === 'flow') {
+              let fracValue = isSmartphone() ? 208 : 104;
+              let extraFrac = isSmartphone() ? 5 : 3
+              /* Object(document.getElementById('containerTitleView')).style.top = (-(Math.floor(newMatrix.f)) + 210) + "px" */
+              if(Math.floor(newMatrix.f) >= 0) {
+             //if(newMatrix.f === 0 && newMatrix.e === 0) {
+                //console.log('Moving 1')
+                Object(document.getElementById('containerTitleView')).style.top = ((fracValue - Math.floor(newMatrix.f))) + "px"
+                //Object(document.getElementById('containerTitleView')).style.top = "210px"
+              } else {
+                //if(newMatrix.f < 0 && newMatrix.e < 0) {
+                  //console.log('Moving 2')
+                  Object(document.getElementById('containerTitleView')).style.top = ((fracValue - Math.floor(newMatrix.f)) - fracValue/20) + extraFrac + "px"
+                  /* map.setMatrix(newMatrix) */
+                //}
+              }
+            }
 
 
             //  rotate and direct participant to the mouse position.

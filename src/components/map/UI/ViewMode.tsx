@@ -113,7 +113,8 @@ const useStyles = makeStyles({
     outline: 'none',
     /* pointerEvents: 'none', */
     textAlign:'left',
-    cursor: 'pointer'
+    cursor: 'pointer',
+
   }),
   /* wrapper:{width:'100%'},
   wrapperInner:{width:'100%', display:'flex', flexDirection:'column', alignItems:'flex-end'}, */
@@ -136,6 +137,11 @@ export function getTotalTaskCount() {
   return taskCount
 }
 
+/* let screenName:string = "ViewMode"
+export function getScreenNameMode() {
+  return screenName;
+}
+ */
 
 
 export const ViewMode: React.FC<BMProps> = (props) => {
@@ -327,7 +333,7 @@ taskCount = taskList.length;
     ///////////////////////////////////////////////////////////////////////////////////
 
     // Days Remaining
-    function getDaysRemaining(endDate:string) {
+    /* function getDaysRemaining(endDate:string) {
       //console.log(endDate, " enddate")
       let dDate = new Date()
       let day = dDate.getDate();
@@ -340,7 +346,7 @@ taskCount = taskList.length;
       var Difference_In_Time = date2.getTime() - date1.getTime();
       var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24);
       return Difference_In_Days
-    }
+    } */
     ///////////////////////////////////////////////////////////////////////////////////
     const sheetUserData = getAllUserData()
     // Find usernname based on id
@@ -514,7 +520,7 @@ taskCount = taskList.length;
           <p style={{position:'absolute', color:'#FFFFFF', left:'4em', top:'-0.3em', fontWeight:'100'}}>{activeUserName.toUpperCase()}</p>
           <img style={{position:'absolute', width:'2.5em', userSelect:'none', right:'0.5em', top:'0em', opacity:'0.7'}} draggable={false} src={viewIcon} alt="" />
         </div> */}
-        <div id='containerHolder' style={{position:'relative', /* width:'100%', height:'100%', */ /* backgroundColor:'cyan', */ top:isSmartphone() ? '14.4em' : '7.4em', display:'flex', left:'0', width:'100%', height:'auto', minWidth:'100%', maxHeight:'auto'}}  /* {...bind()} */>
+        <div id='containerHolder' style={{position:'relative', /* width:'100%', height:'100%', */ /* backgroundColor:'cyan', */ top:isSmartphone() ? menuName === 'flow' ? '21em' : '12em'/* '14.4em' */ :  menuName === 'flow' ? '10em'/* '11em' */ : '6em'/* '7.4em' */, display:'flex', left:'0', width:'100%', height:'auto', minWidth:'100%', maxHeight:'auto'/* , overflow:'auto' */}}  /* {...bind()} */>
           {/* <div style={{border: "2px solid red", padding: "1rem", width: "98%"}}>
             <div>Drag from here</div>
             <div>This readme is really dragging on...</div>
@@ -524,14 +530,14 @@ taskCount = taskList.length;
         activeUserName !== '' ?
         (menuName === 'flow' ?
         docList.map((item:any, i:number)=>
-          <div style={{position:'relative', width:isSmartphone() ? '11em/* 14em */' : '5.5em/* 7em */', height:'auto', backgroundColor:'white', border:'0px solid black', /* left:'1em',  */top:'1em', marginRight:'0em', textAlign:'center', left:'1em', fontFamily:'DINCondensed-Bold', userSelect:'none'}}>
-            <div style={{fontSize:isSmartphone() ? '5em' : '2.2em', color:'orange', fontWeight:'700', position:'relative', left:'0.3em'}}> {getDaysRemaining(item['Due Date'])}</div>
-            <div style={{fontSize:isSmartphone() ? '2em' : '1em', color:'grey', fontWeight:'700', width:isSmartphone() ? '7em' : '7em'}}> {item['Doc Ref']}{/* 45967-2.0.1 */}</div>
+          <div style={{position:'relative', width:isSmartphone() ? '11em/* 14em */' : '5.5em/* 7em */', height:'auto', backgroundColor:'white', border:'0px solid black', /* left:'1em',  */top:'1em', marginRight:'0em', textAlign:'center', left:'1em', fontWeight:'100', fontFamily:'DINCondensed-Bold', userSelect:'none'}}>
+            <div style={{fontSize:isSmartphone() ? '5em' : '2.2em', color:'orange', fontWeight:'100', position:'relative', left:'0.3em', fontFamily:'DINCondensed-Bold'}}>{/*  {getDaysRemaining(item['Due Date'])} */}</div>
+            <div style={{fontSize:isSmartphone() ? '2em' : '1em', color:'grey', /* fontWeight:'700', */ width:isSmartphone() ? '7em' : '7em'}}> {/* {item['Doc Ref']} */}</div>
             <div style={{position:'relative', width:isSmartphone() ? '7em' : '3em', height:isSmartphone() ? '7em' : '3em', left:isSmartphone() ? '3.6em' : '1.9em', borderRadius:'50%', backgroundColor:'#4A936E', textAlign:'center', top:'0.2em'}}></div>
             <div style={{position:'relative', width:isSmartphone() ? '7em' : '3em', height:isSmartphone() ? '7em' : '3em', left:isSmartphone() ? '3.6em' : '1.9em', borderRadius:'50%', backgroundColor:'#208251', textAlign:'center', top:isSmartphone() ? '-5.5em' : '-2.3em'}}></div>
 
             <div style={{position:'relative', width:isSmartphone() ? '7em' : '3em', height:isSmartphone() ? '7em' : '3em', left:isSmartphone() ? '3.6em' : '1.9em', borderRadius:'50%', backgroundColor:'#006837', textAlign:'center', top:isSmartphone() ? '-11.5em' : '-4.9em'}}>
-              <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '4em' : '1.8em', position:'relative', top:'0.3em', color:'#FFFFFF'}}>{getCompletedTaskCount(i)}</div>
+              <div style={{fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '4em' : '1.8em', position:'relative', top:'0.3em', color:'#FFFFFF'}}>{getCompletedTaskCount(i)}</div>
             </div>
             {
               taskList.map((lisitem:any, index:number)=>
@@ -541,7 +547,7 @@ taskCount = taskList.length;
               <div style={{position:'relative', top:isSmartphone() ? '-12em' : '-5.1em', height:isSmartphone() ? '14em' : '6.2em'}}>
                 <div style={{position:'relative', width:isSmartphone() ? '1.4em' : '0.6em', height:isSmartphone() ? ((taskList.length - 1) === index) ? '12em' : '16em' : ((taskList.length - 1) === index) ? '5em' : '7em', backgroundColor:'black', marginLeft:isSmartphone() ? '6.55em' : '3.15em', borderRadius:'2px/* 12px */'}}></div>
                 <div onClick={()=>onFlowUserClick(item/* getTaskUserInitials(String(item[lisitem])) */)} style={{position:'relative', width:isSmartphone() ? '6em' : '3em', height:isSmartphone() ? '6em' : '3em', left:isSmartphone() ? '3.6em' : '1.6em', borderRadius:'50%', backgroundColor:(getTaskUserInitials(String(item[lisitem])) === dispUserName) ? '#F7931E' : 'lightgrey', textAlign:'center', top:isSmartphone() ? ((taskList.length - 1) === index) ? '-6.5em' :  '-10.5em' : ((taskList.length - 1) === index) ? '-2.3em' : '-4.3em', border:isSmartphone() ? (getTaskUserInitials(String(item[lisitem])) === dispUserName) ? '10px solid #F7931E' : '10px solid black' : (getTaskUserInitials(String(item[lisitem])) === dispUserName) ? '5px solid #F7931E' : '5px solid black'}}>
-                  <div style={{fontSize:isSmartphone() ? '3.5em' : '1.8em', color:(getTaskUserInitials(String(item[lisitem])) === dispUserName) ? '#FFFFFF' : 'black', fontWeight:'700', position:'relative', top:'0.3em'}}>{getTaskUserInitials(String(item[lisitem]))}
+                  <div style={{fontSize:isSmartphone() ? '3.5em' : '1.8em', color:(getTaskUserInitials(String(item[lisitem])) === dispUserName) ? '#FFFFFF' : 'black', fontFamily:'DINCondensed-Bold', fontWeight:'100', position:'relative', top:'0.3em'}}>{getTaskUserInitials(String(item[lisitem]))}
                   </div>
                 </div>
               </div> : ''
@@ -564,10 +570,10 @@ taskCount = taskList.length;
          ) :
 
 
-         <div style={{position:'relative', width:'100%', height:'auto', color:'red', textAlign:'center', top:isSmartphone() ? '2em':'0.6em', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '3em' : '1.5em', userSelect:'none'}}>
+         <div style={{position:'relative', width:'100%', height:'auto', color:'red', textAlign:'center', top:isSmartphone() ? '2em':'0.6em', fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '3em' : '1.5em', userSelect:'none'}}>
             <div style={{position:'relative', display:'flex'}}>
-              <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '2.5em' : '2em', position:'relative', top:isSmartphone() ? '-0.5em' : '0.5em', color:'#F15A24', textAlign:'left', paddingLeft:isSmartphone() ? '0.9em' : '1.8em'}}>{getUserTotalTasks()}</div>
-              <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '1.2em' : '1em', position:'relative', top:isSmartphone() ? '-0.2em' : '1.8em', color:'black', textAlign:'left', paddingLeft:isSmartphone() ? '2.8em' : '4.3em'}}>{getUserTotalTasks() <= 1 ? 'TASK' : 'TASKS'}</div>
+              <div style={{fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '2.5em' : '2em', position:'relative', top:isSmartphone() ? '-0.5em' : '0.5em', color:'#F15A24', textAlign:'left', paddingLeft:isSmartphone() ? '0.9em' : '1.8em'}}>{getUserTotalTasks()}</div>
+              <div style={{fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '1.2em' : '1em', position:'relative', top:isSmartphone() ? '-0.2em' : '1.8em', color:'black', textAlign:'left', paddingLeft:isSmartphone() ? '2.8em' : '4.3em'}}>{getUserTotalTasks() <= 1 ? 'TASK' : 'TASKS'}</div>
             </div>
             {
             AllFlowItemsDetails.map((lisitem:any, i:number)=>
@@ -579,13 +585,13 @@ taskCount = taskList.length;
               <div style={{position:'relative', display:'flex', width:'100%', justifyContent:'space-between', right:'0', top:'0.1em'}}>
                 <div style={{position:'relative', width:'0%'}}>
                   <div style={{position:'relative', width:isSmartphone() ? '3em' : '3em', height:isSmartphone() ? '3em' : '3em', left:isSmartphone() ? '-9.2em' : '-8em', borderRadius:'50%', backgroundColor:'#BEBEBE', textAlign:'left', top:isSmartphone() ? '0.6em' : '0.7em'}}>
-                    <div style={{fontSize:isSmartphone() ? '1.8em' : '1.5em', color:'#020202', fontWeight:'700', position:'relative', top:isSmartphone() ? '0.3em' : '0.4em', textAlign:'center'}}>{dispUserName}</div>
+                    <div style={{fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '1.8em' : '1.5em', color:'#020202', fontWeight:'100', position:'relative', top:isSmartphone() ? '0.3em' : '0.4em', textAlign:'center'}}>{dispUserName}</div>
                   </div>
                 </div>
                 <div style={{position:'absolute', left:isSmartphone() ? '-4em' : '-2em', top:isSmartphone() ? '-0.1em' : '-0.2em'}}>
-                  <div style={{position:'relative', top:'0.6em', color:'black', fontSize:isSmartphone() ? '1.2em' : '1.1em'}}>{lisitem.Component}</div>
-                  <div style={{position:'relative', top:'0.8em', color:'#00000095', fontSize:isSmartphone() ? '0.9em' : '0.8em',}}>{lisitem.Project}</div>
-                  <div style={{position:'relative', top:'0.9em', color:'#00000095', fontSize:isSmartphone() ? '0.9em' : '0.8em',}}>DUE: {lisitem[item].split(':')[2] !== 'undefined' ? lisitem[item].split(':')[2] : '' /* lisitem['Due Date'] */}</div>
+                  <div style={{position:'relative', top:'0.6em', color:'black', fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '1.2em' : '1.1em'}}>{lisitem.Component}</div>
+                  <div style={{position:'relative', top:'0.8em', color:'#00000095', fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '0.9em' : '0.8em',}}>{lisitem.Project}</div>
+                  <div style={{position:'relative', top:'0.9em', color:'#00000095', fontWeight:'100', fontFamily:'DINCondensed-Bold', fontSize:isSmartphone() ? '0.9em' : '0.8em',}}>DUE: {lisitem[item].split(':')[2] !== 'undefined' ? lisitem[item].split(':')[2] : '' /* lisitem['Due Date'] */}</div>
                 </div>
                 <div style={{position:'relative', width:'10%', textAlign:'right', top:isSmartphone() ? '1.2em' : '1.1em', right:isSmartphone() ? '1.7em' : '1em'}}>
                   <div><ArrowForwardIcon style={{width:isSmartphone() ? '4em' : '2em', height:isSmartphone() ? '4em' : '2em', color:'black'}} /></div>
